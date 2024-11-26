@@ -27,21 +27,17 @@ def game_over(screen: pg.Surface)-> None:
     rct.center = WIDTH/2,HEIGHT/2
     screen.blit(txt,rct)
 
-    
     cry_img = pg.transform.rotozoom(pg.image.load("fig/8.png"),0.0,2.0)
     rct = cry_img.get_rect()
     rct.topleft = (300, 250)
     screen.blit(cry_img,rct,)
     
     rct2 = cry_img.get_rect()
-    rct2.topleft = (750, 250)
+    rct2.topleft = (700, 250)
     screen.blit(cry_img,rct2,)
-    
-
     
     pg.display.update()  
     time.sleep(5)
-
 
 def check_bound(rct: pg.Rect) -> tuple[bool, bool]:
     """
@@ -55,9 +51,6 @@ def check_bound(rct: pg.Rect) -> tuple[bool, bool]:
     if rct.top < 0 or HEIGHT < rct.bottom:
         tate = False
     return yoko, tate
-
-
-
 
 def main():
     pg.display.set_caption("逃げろ！こうかとん")
@@ -106,7 +99,6 @@ def main():
         pg.display.update()
         tmr += 1
         clock.tick(50)
-
 
 if __name__ == "__main__":
     pg.init()
