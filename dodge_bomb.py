@@ -2,6 +2,7 @@ import os
 import random
 import sys
 import pygame as pg
+import time
 
 
 WIDTH, HEIGHT = 1100, 650
@@ -13,11 +14,40 @@ DELTA = {
 }
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
+def game_over(screen: pg.Surface)-> None:
+
+    img = pg.Surface((WIDTH,HEIGHT))
+    pg.draw.rect(img,(0,0,0),pg.Rect(0,0,WIDTH,HEIGHT))
+    img.set_alpha(200)
+    screen.blit(img,[0,0])
+
+    fonto = pg.font.Font(None,80)
+    txt = fonto.render("Game Over",True,(255,255,255))
+    rct = txt.get_rect()
+    rct.center = WIDTH/2,HEIGHT/2
+    screen.blit(txt,rct)
+
+    
+    cry_img = pg.transform.rotozoom(pg.image.load("fig/8.png"),0.0,2.0)
+    rct = cry_img.get_rect()
+    rct.topleft = (300, 250)
+    screen.blit(cry_img,rct,)
+    
+    rct2 = cry_img.get_rect()
+    rct2.topleft = (750, 250)
+    screen.blit(cry_img,rct2,)
+    
+
+    
+    pg.display.update()  
+    time.sleep(5)
+
+
 def check_bound(rct: pg.Rect) -> tuple[bool, bool]:
     """
     引数で与えられたRectが画面の中か外かを判定する
-    引数：こうかとんRect or 爆弾Rect
-    戻り値：真理値タプル（横，縦）／画面内：True，画面外：False
+    引数:こうかとんRect or 爆弾Rect
+    戻り値:真理値タプル（横,縦）/画面内:True,画面外:False
     """
     yoko, tate = True, True
     if rct.left < 0 or WIDTH < rct.right:
@@ -25,6 +55,8 @@ def check_bound(rct: pg.Rect) -> tuple[bool, bool]:
     if rct.top < 0 or HEIGHT < rct.bottom:
         tate = False
     return yoko, tate
+
+
 
 
 def main():
@@ -47,6 +79,10 @@ def main():
         for event in pg.event.get():
             if event.type == pg.QUIT: 
                 return
+        if kk_rct.colliderect(bb_rct):
+            game_over(screen)
+            pg.display.update()
+            return
         screen.blit(bg_img, [0, 0]) 
 
         key_lst = pg.key.get_pressed()
